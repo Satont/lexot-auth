@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
-const db = require("../db.js");
+const { User } = require('../repos/user.repo')
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../static/register.html"));
@@ -13,11 +13,11 @@ router.get("/warning", (req, res) => {
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
-  const user = await db.User.findOne({
+  const user = await User.findOne({
     username: username,
   }).exec();
   if (user === null) {
-    db.User.create({ username: username, password: password });
+    User.create({ username: username, password: password });
     res.redirect("/login");
   } else {
     res.redirect("/register/warning");

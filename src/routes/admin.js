@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
-const db = require("../db.js");
+const { User } = require('../repos/user.repo')
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../static/admin.html"));
@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 
 router.get("/api/users", async (req, res) => {
   try {
-    const users = await db.User.find({});
+    const users = await User.find({});
     res.json(users);
   } catch (error) {
     console.error(error);
@@ -18,7 +18,7 @@ router.get("/api/users", async (req, res) => {
 });
 
 router.post("/delete", async (req, res) => {
-  await db.User.deleteMany({ username: { $ne: "admin" } });
+  await User.deleteMany({ username: { $ne: "admin" } });
   res.redirect("/admin");
 });
 
